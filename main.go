@@ -18,17 +18,14 @@ const (
 )
 
 func main() {
-	// 加载配置（从环境变量读取，未配置则使用默认值）
+	// 加载配置
 	cfg := loadConfig()
 
 	// 设置路由
 	http.HandleFunc("/webhook", handlers.WebhookHandler(cfg))
 
 	// 启动服务器
-	log.Printf("Server starting on port %s", cfg.Server.Port)
-	log.Printf("Auth token: %s", maskToken(cfg.Server.AuthToken))
-	log.Printf("ServerChan API key: %s", maskToken(cfg.ServerChan.APIKey))
-	log.Printf("Time zone: %s", cfg.Server.TimeLocation.String())
+	log.Printf("服务启动: 端口%s, 时区%s", cfg.Server.Port, cfg.Server.TimeLocation.String())
 
 	log.Fatal(http.ListenAndServe(cfg.Server.Port, nil))
 }
@@ -45,7 +42,7 @@ func loadConfig() *types.Config {
 	// 设置时区位置
 	location, err := time.LoadLocation(timeZone)
 	if err != nil {
-		log.Printf("Warning: Invalid timezone '%s', using UTC. Error: %v", timeZone, err)
+		log.Printf("时区设置失败 '%s', 使用UTC。错误: %v", timeZone, err)
 		location = time.UTC
 	}
 	cfg.Server.TimeLocation = location
@@ -74,13 +71,6 @@ func normalizePort(port string) string {
 		return ":" + port
 	}
 
-	log.Printf("Warning: Invalid port format '%s', using default port %s", port, defaultPort)
+	log.Printf("端口格式无效 '%s', 使用默认端口 %s", port, defaultPort)
 	return defaultPort
-}
-
-func maskToken(token string) string {
-	if len(token) <= 8 {
-		return "***"
-	}
-	return token[:4] + "***" + token[len(token)-4:]
 }

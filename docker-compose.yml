@@ -1,0 +1,13 @@
+services:
+  webhook:
+    # image: oxnme/hetrixtools2serverchan:latest # Docker Hub 
+    image: ghcr.io/oxnme/hetrixtools2serverchan:latest
+    container_name: webhook
+    ports:
+      - "8080:8080"
+    environment:
+      - AUTH_TOKEN=your_production_token
+      - SERVER_CHAN_KEY=your_production_key
+      - PORT=8080
+      - TZ=Asia/Shanghai
+    restart: unless-stopped

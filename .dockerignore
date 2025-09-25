@@ -1,0 +1,13 @@
+.git
+.gitignore
+Dockerfile
+docker-compose.yml
+LICENSE
+*.md
+bin/
+dist/
+# macOS system files
+.DS_Store
+**/.DS_Store
+*.DS_Store
+*/.DS_Store
